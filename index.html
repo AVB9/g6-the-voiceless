@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>THE VOICELESS · G6 Animal Ethics</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Subtle SVG Chalk & Linen Grain Filter for Organic Board Texture -->
+  <svg class="grain-svg" aria-hidden="true">
+    <filter id="board-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.065" />
+      </feComponentTransfer>
+    </filter>
+  </svg>
+
+  <div class="app-shell">
+    <!-- HEADER -->
+    <header class="site-header">
+      <span class="group-badge" id="adminTrigger">G6 EXHIBITION</span>
+      <h1 class="site-title">THE VOICELESS</h1>
+      <p class="site-subtitle">&ldquo;They cannot speak our language. Does that mean they don&rsquo;t deserve a voice?&rdquo;</p>
+    </header>
+
+    <!-- VIEW 1: HOME PAGE -->
+    <main id="homeView" class="view-section">
+
+      <!-- CENTERED ROUNDED ACTION BUTTON ABOVE THE BOARD -->
+      <div class="top-action-bar" id="topActionBar">
+        <button type="button" class="rounded-gold-btn" id="openFormBtn">
+          Submit Your Response
+        </button>
+      </div>
+
+      <!-- TEXTURED CHALKBOARD / QUOTE BOARD -->
+      <div class="board-frame" id="boardFrame">
+        <div class="board-surface" id="boardSurface">
+          <div class="board-grain-overlay" aria-hidden="true"></div>
+
+          <!-- MAIN QUOTES AREA -->
+          <div class="board-main-stage">
+            <!-- EMPTY STATE (Shown when 0 responses exist) -->
+            <div id="emptyStateBox" class="board-empty-state">
+              <p class="empty-chalk-quote">&ldquo;Be the first one to speak up&rdquo;</p>
+              <span class="empty-chalk-sub">&mdash; Share your voice on our board</span>
+            </div>
+
+            <!-- ORGANIC SCATTERED QUOTES CANVAS -->
+            <div id="quotesCanvas" class="quotes-canvas hidden" aria-live="polite"></div>
+          </div>
+
+          <!-- INTEGRATED CHALK STANCE LEDGER (Etched directly along the bottom of the board, visible in normal & fullscreen modes) -->
+          <div class="board-stance-footer" id="boardStanceFooter">
+            <div class="stance-question-whisper">Animals for entertainment (zoos, circuses, rides)?</div>
+
+            <!-- Whisper-thin 3-segment proportion line -->
+            <div class="stance-spectrum-line" aria-hidden="true">
+              <div class="spectrum-seg seg-never" id="seg_NEVER" style="width: 33.3%"></div>
+              <div class="spectrum-seg seg-conservation" id="seg_CONSERVATION" style="width: 33.3%"></div>
+              <div class="spectrum-seg seg-fine" id="seg_FINE" style="width: 33.4%"></div>
+            </div>
+
+            <!-- Minimalist typographic chalk tallies -->
+            <div class="stance-pillars">
+              <div class="stance-pillar">
+                <span class="stance-pct" id="pct_NEVER">0%</span>
+                <span class="stance-label">Never</span>
+              </div>
+              <div class="stance-divider" aria-hidden="true">&middot;</div>
+              <div class="stance-pillar">
+                <span class="stance-pct" id="pct_CONSERVATION">0%</span>
+                <span class="stance-label">Only for Conservation</span>
+              </div>
+              <div class="stance-divider" aria-hidden="true">&middot;</div>
+              <div class="stance-pillar">
+                <span class="stance-pct" id="pct_FINE">0%</span>
+                <span class="stance-label">It&rsquo;s Fine</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- INVISIBLE FULLSCREEN TRIGGER BUTTON IN BOTTOM-RIGHT CORNER OF THE BOARD -->
+          <button
+            type="button"
+            id="fullscreenBoardBtn"
+            class="invisible-fs-btn"
+            aria-label="Toggle Fullscreen Board"
+            title=""
+          ></button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- VIEW 2: UNCLUTTERED, SPACIOUS ROUNDED 5-QUESTION FORM -->
+    <section id="formView" class="view-section hidden">
+      <div class="form-sheet">
+        <div class="form-header-row">
+          <button type="button" class="pill-back-btn" id="backToHomeBtn">&larr; Back to Board</button>
+        </div>
+
+        <form id="ethicsForm" class="clean-form" novalidate>
+
+          <!-- QUESTION 1 -->
+          <div class="q-group">
+            <label class="q-title" for="q1Name">What is your name?</label>
+            <input
+              type="text"
+              id="q1Name"
+              class="rounded-input"
+              placeholder="Your name"
+              maxlength="45"
+              required
+            />
+          </div>
+
+          <!-- QUESTION 2 -->
+          <div class="q-group">
+            <p class="q-title">Is it ethical to use animals for entertainment (zoos, circuses, rides)?</p>
+            <div class="pill-options" id="q2Container" data-q="q2Entertainment"></div>
+          </div>
+
+          <!-- QUESTION 3 -->
+          <div class="q-group">
+            <p class="q-title">What are the 3 Rs in the RRR framework?</p>
+            <div class="pill-options" id="q3Container" data-q="q3ThreeRs"></div>
+          </div>
+
+          <!-- QUESTION 4 -->
+          <div class="q-group">
+            <p class="q-title">What is SENTIENCE?</p>
+            <div class="pill-options" id="q4Container" data-q="q4Sentience"></div>
+          </div>
+
+          <!-- QUESTION 5 -->
+          <div class="q-group">
+            <label class="q-title" for="q5Promise">What is one small way you will help animals starting today?</label>
+            <textarea
+              id="q5Promise"
+              class="rounded-textarea"
+              rows="3"
+              placeholder="Write your quote for the board..."
+              maxlength="180"
+              required
+            ></textarea>
+          </div>
+
+          <p id="formErrorMsg" class="form-error hidden">Please complete all 5 questions before submitting.</p>
+
+          <div class="center-action-bar">
+            <button type="submit" class="rounded-gold-btn submit-wide">
+              Submit Response
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <span>ANIMAL ETHICS &middot; MGT1001 &middot; GROUP G6</span>
+    </footer>
+  </div>
+
+  <!-- MODAL 1: SCORE POP-UP AFTER FORM SUBMISSION -->
+  <div id="scoreModal" class="modal-backdrop hidden">
+    <div class="modal-card score-modal-card">
+      <span class="score-kicker">RESPONSE RECORDED</span>
+      <h3 class="score-heading" id="scoreNumberDisplay">2 / 2</h3>
+      <p class="score-subtext" id="scoreFeedbackText">
+        You got both ethics knowledge questions right, and your quote has been written on the board.
+      </p>
+      <div class="score-review-box" id="scoreBreakdownList"></div>
+      <button type="button" class="rounded-gold-btn submit-wide" id="scoreDoneBtn">
+        Done
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 2: PASSWORD-PROTECTED BOARD CONTROLS (5 clicks + Passcode: 7018) -->
+  <div id="adminModal" class="modal-backdrop hidden">
+    <div class="modal-card admin-modal-card">
+      <!-- Step A: Password Lock -->
+      <div id="adminLockStep">
+        <h3 class="modal-title">Board Controls</h3>
+        <p class="modal-sub">Enter the group admin passcode to manage responses:</p>
+        <input
+          type="password"
+          id="adminPassInput"
+          class="rounded-input"
+          placeholder="Enter passcode"
+          maxlength="12"
+        />
+        <p id="adminPassError" class="form-error hidden" style="margin-top:8px;">Incorrect passcode.</p>
+        <div class="modal-btn-row">
+          <button type="button" class="rounded-gold-btn small-btn" id="unlockAdminBtn">Unlock</button>
+          <button type="button" class="outline-round-btn" id="closeLockModalBtn">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Step B: Unlocked Admin Panel (Delete Single Response or Clear All) -->
+      <div id="adminPanelStep" class="hidden">
+        <div class="admin-header-row">
+          <h3 class="modal-title">Manage Board Responses</h3>
+          <span class="admin-count-badge" id="adminTotalCount">0 items</span>
+        </div>
+        <p class="modal-sub">Remove individual visitor responses or clear the entire board:</p>
+
+        <div id="adminResponsesList" class="admin-responses-list"></div>
+
+        <div class="modal-btn-row" style="justify-content: space-between; margin-top: 16px;">
+          <button type="button" class="danger-round-btn" id="clearAllBtn">Clear Entire Board</button>
+          <button type="button" class="outline-round-btn" id="closeAdminBtn">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
